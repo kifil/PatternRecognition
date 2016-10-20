@@ -1,17 +1,22 @@
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by User on 10/18/2016.
  */
 public class BruteCollinearPoints {
 
-    private int segmentCount = 0;
     private LineSegment[] lineSegments;
+    private List<LineSegment> lineSegmentList;
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points){
-//        lineSegments = new LineSegment[points.length];
-        lineSegments = new LineSegment[1];// need this to be actual lenght of segment count...
+        if(points == null){
+            throw new java.lang.NullPointerException();
+        }
+
+        lineSegmentList = new ArrayList<LineSegment>();
         Arrays.sort(points);
 
         for(int i = 0; i < points.length; i ++){
@@ -31,23 +36,25 @@ public class BruteCollinearPoints {
                             points[j].compareTo(points[k]) == 0 ||
                             points[j].compareTo(points[l]) == 0 ||
                             points[k].compareTo(points[l]) == 0){
+                                //duplicate point
                                 throw new java.lang.IllegalArgumentException();
                         }
 
                         if(points[i].slopeTo(points[j]) ==  points[i].slopeTo(points[k]) &&
                             points[i].slopeTo(points[j]) ==  points[i].slopeTo(points[l])){
-                                lineSegments[segmentCount] = new LineSegment(points[i],points[l]);
-                                segmentCount++;
+                                lineSegmentList.add(new LineSegment(points[i],points[l]));
                         }
                     }
                 }
             }
         }
+
+        lineSegments = lineSegmentList.toArray(new LineSegment[lineSegmentList.size()]);
     }
 
     // the number of line segments
     public int numberOfSegments() {
-        return segmentCount;
+        return lineSegments.length;
     }
 
     // the line segments
